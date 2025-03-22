@@ -1,5 +1,4 @@
 
-
 import express from "express";
 import cors from "cors";
 import { google } from "googleapis";
@@ -17,8 +16,8 @@ const PORT = process.env.PORT || 8000;
 app.use(express.json());
 app.use(cors());
 
-const CLIENT_ID = "CLIENT ID";
-const CLIENT_SECRET = "CLIENT SECRET";
+const CLIENT_ID = "1088819963367-qu19kkk5o5l7bgu5f6ff9u1941ql3gcg.apps.googleusercontent.com";
+const CLIENT_SECRET = "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";
 const REDIRECT_URI = "http://localhost:8000/oauth2callback";
 const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 const SCOPES = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/gmail.send"];
@@ -84,7 +83,6 @@ app.post("/schedule_event", async (req, res) => {
                     timeZone: "Asia/Kolkata",
                 },
                 attendees: mails.map((email) => ({ email })),
-                recurrence: ["RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;COUNT=1420"],
                 conferenceData: {
                     createRequest: {
                         requestId: `request-${Date.now()}`,
@@ -145,3 +143,7 @@ app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
     opn(authUrl);
 });
+
+
+
+
