@@ -1,40 +1,3 @@
- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meeting Scheduler</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div class="form-container">
-    <h1>Schedule Meeting</h1>
-    <form id="meetingForm">
-        <label for="meeting_title">Meeting Title:</label>
-        <input type="text" id="meeting_title" name="meeting_title" placeholder="Enter meeting title" required>
-
-        <label for="date_time">Start Date & Time:</label>
-        <input type="datetime-local" id="date_time" name="date_time" required>
-
-        <label for="end_time">End Date & Time:</label>
-        <input type="datetime-local" id="end_time" name="end_time" required>  
-
-        <label for="emails">Participant Emails:</label>
-        <input type="text" id="emails" name="emails" placeholder="Enter emails separated by commas" required>
-
-        <label for="links">Meeting Link (Optional):</label>
-        <input type="url" id="links" name="links" placeholder="Enter meeting link (if any)">
-
-        <button type="submit">Schedule</button>
-    </form>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html> -->
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +6,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meeting Scheduler</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #333;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 40px;
+            border-radius: 14px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: 0.3s;
+            max-height: 97vh;
+            overflow-y: auto;
+            width: 400px;
+        }
+
+        /* Heading */
+        .form-container h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Label Styling */
+        .form-container label {
+            display: block;
+            font-weight: 600;
+            color: #444;
+            text-align: left;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        /* Input Fields */
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f9f9f9;
+            transition: 0.3s ease-in-out;
+        }
+
+        /* Input Focus */
+        .form-container input:focus,
+        .form-container select:focus,
+        .form-container textarea:focus {
+            border-color: #2575fc;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 5px rgba(37, 117, 252, 0.4);
+        }
+
+        /* Adjust textarea height */
+        .form-container textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        /* Button */
+        .form-container button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s;
+        }
+
+        /* Button Hover */
+        .form-container button:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            transform: translateY(-2px);
+        }
+
+        /* Meeting List */
+        .meeting-list {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 14px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
 
@@ -70,13 +144,79 @@
             <option value="Team3">Team 3</option>
         </select>
 
-        <label for="links">Meeting Link (Optional):</label>
-        <input type="url" id="links" name="links" placeholder="Enter meeting link (if any)">
-
         <button type="submit">Schedule</button>
     </form>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="script.js"></script>
+
+<script>
+    document.getElementById("meetingForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const meetingTitle = document.getElementById("meeting_title").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const startDateTime = document.getElementById("date_time").value;
+        const endDateTime = document.getElementById("end_time").value;
+        const selectedGroup = document.getElementById("group").value;
+        
+        const groups = {
+            "Team1": ["chanrakumar019@gmail.com", "snehaelango04@gmail.com"],
+            "Team2": ["chanrakumar019@gmail.com", "snehaelango04@gmail.com"],
+            "Team3": ["supreet2982002@gmail.com", "prakash.kopf14@gmail.com"]
+        };
+
+        if (!meetingTitle || !description || !startDateTime || !endDateTime || !selectedGroup) {
+            alert("⚠️ All fields are required.");
+            return;
+        }
+
+        const emails = groups[selectedGroup];
+
+        const payload = {
+            meetingTitle,
+            description,
+            startTime: new Date(startDateTime).toISOString(),
+            endTime: new Date(endDateTime).toISOString(),
+            mails: emails
+        };
+
+        console.log("Submitting payload:", payload);
+
+        try {
+            const response = await fetch("http://localhost:8000/schedule_event", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("✅ Meeting Scheduled Successfully!");
+                fetchMeetings();
+            } else {
+                alert(`❌ Error: ${result.msg || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error("❌ Request failed:", error);
+            alert("⚠️ Failed to schedule the meeting.");
+        }
+    });
+
+    async function fetchMeetings() {
+        try {
+            const response = await fetch("http://localhost:8000/get_meetings");
+            const meetings = await response.json();
+
+            const meetingContainer = document.getElementById("existingMeetings");
+            meetingContainer.innerHTML = meetings.length 
+                ? meetings.map(m => `<p>${m.meetingTitle} - ${m.startTime}</p>`).join("")
+                : "No meetings found.";
+        } catch (error) {
+            document.getElementById("existingMeetings").textContent = "Error loading meetings.";
+        }
+    }
+
+    fetchMeetings();
+</script>
+
 </body>
 </html>
